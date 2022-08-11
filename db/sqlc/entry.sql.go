@@ -14,12 +14,17 @@ INSERT INTO enteries (
     account_id,
     amount
 ) VALUES (
-             $1, 200
+             $1, $2
          ) RETURNING id, account_id, amount, created_at
 `
 
-func (q *Queries) CreateEntry(ctx context.Context, accountID int64) (Entery, error) {
-	row := q.db.QueryRowContext(ctx, createEntry, accountID)
+type CreateEntryParams struct {
+	AccountID int64 `json:"account_id"`
+	Amount    int64 `json:"amount"`
+}
+
+func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Entery, error) {
+	row := q.db.QueryRowContext(ctx, createEntry, arg.AccountID, arg.Amount)
 	var i Entery
 	err := row.Scan(
 		&i.ID,
@@ -51,12 +56,18 @@ const listEntries = `-- name: ListEntries :many
 SELECT id, account_id, amount, created_at FROM enteries
 WHERE account_id = $1
 ORDER BY id
-    LIMIT 2
-OFFSET 3
+    LIMIT $2
+OFFSET $3
 `
 
-func (q *Queries) ListEntries(ctx context.Context, accountID int64) ([]Entery, error) {
-	rows, err := q.db.QueryContext(ctx, listEntries, accountID)
+type ListEntriesParams struct {
+	AccountID int64 `json:"account_id"`
+	Limit     int32 `json:"limit"`
+	Offset    int32 `json:"offset"`
+}
+
+func (q *Queries) ListEntries(ctx context.Context, arg ListEntriesParams) ([]Entery, error) {
+	rows, err := q.db.QueryContext(ctx, listEntries, arg.AccountID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

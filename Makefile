@@ -7,6 +7,13 @@ createdb:
 dropdb:
 	docker exec  -it bankManagement dropdb bankManagement
 #makemigrations up and down
+
+migrateup:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/bankManagement?sslmode=disable" -verbose up
+
+migratedown:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/bankManagement?sslmode=disable" -verbose down
+
 sqlc:
 	sqlc generate
 

@@ -3,7 +3,7 @@ INSERT INTO enteries (
     account_id,
     amount
 ) VALUES (
-             $1, 200
+             $1, $2
          ) RETURNING *;
 
 -- name: GetEntry :one
@@ -14,5 +14,5 @@ WHERE id = $1 LIMIT 1;
 SELECT * FROM enteries
 WHERE account_id = $1
 ORDER BY id
-    LIMIT 2
-OFFSET 3;
+    LIMIT $2
+OFFSET $3;
