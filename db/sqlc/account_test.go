@@ -2,9 +2,8 @@ package db
 
 import (
 	"context"
-	"testing"
-
 	"github.com/stretchr/testify/require"
+	"testing"
 )
 
 func TestCreateAccount(t *testing.T) {
@@ -13,7 +12,8 @@ func TestCreateAccount(t *testing.T) {
 		Balance:  2000,
 		Currency: "USD",
 	}
-
+	//TO DO
+	//accoun relation does not exist
 	account, err := testQueries.CreateAccount(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, account)
