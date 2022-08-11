@@ -6,5 +6,8 @@ createdb:
 
 dropdb:
 	docker exec  -it bankManagement dropdb bankManagement
+#makemigrations up and down
+sqlc:
+	sqlc generate
 
-.PHONY:createdb
+.PHONY:postgres createdb dropdb sqlc
